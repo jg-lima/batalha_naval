@@ -88,7 +88,7 @@ def main():
                     navios_colocados = [0, 0]
                     jogador_vencedor = 0
 
-        tela_jogo.fill((44, 62, 80))
+        tela_jogo.fill(('darkgray'))
 
         if estado_jogo == "setup1":
             celula = celula_do_mouse(mouse_x, mouse_y)
