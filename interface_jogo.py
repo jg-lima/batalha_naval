@@ -14,17 +14,17 @@ def criar_janela():
 
 
 def carregar_sons():
-    sons_jogo = {"acerto": None, "agua": None}
+    sons_jogo = {"acerto": None, "agua": None} # cria um dicionário para armazenar os sons do jogo, onde as chaves são "acerto" e "agua". Inicialmente, os valores são definidos como None, indicando que os sons ainda não foram carregados. O dicionário é usado para organizar e acessar facilmente os sons do jogo com base em suas chaves correspondentes.
 
     pygame.mixer.init()
     sons_jogo["acerto"] = pygame.mixer.Sound("./sons/acertou.mp3")
     sons_jogo["agua"] = pygame.mixer.Sound("./sons/agua.mp3")
-
+    # inicializa o mixer de áudio do Pygame e carrega os arquivos de som "acertou.mp3" e "agua.mp3" para as chaves "acerto" e "agua" do dicionário sons_jogo, respectivamente.
     return sons_jogo
 
 
 def tocar_som(sons_jogo, chave_som):
-    sons_jogo[chave_som].play()
+    sons_jogo[chave_som].play() # acessa o som correspondente à chave fornecida (chave_som) no dicionário sons_jogo e reproduz o som usando o método play().
 
 
 def desenhar_grade(tela_jogo, fonte_pequena, tabuleiro, tiros_jogador, esconder=False, celula_hover=None):
@@ -38,10 +38,10 @@ def desenhar_grade(tela_jogo, fonte_pequena, tabuleiro, tiros_jogador, esconder=
     for linha in range(10):
         for coluna in range(10):
             pos_x = 40 + coluna * 52
-            pos_y = 40 + linha * 52
-            retangulo = pygame.Rect(pos_x, pos_y, 52, 52)
-            celula_tem_navio = tabuleiro[linha][coluna] != 0
-            celula_foi_atirada = (coluna, linha) in tiros_jogador
+            pos_y = 40 + linha * 52 # calcula as coordenadas x e y para desenhar a célula da grade com base na posição da coluna e linha, multiplicando o índice da coluna por 52 (tamanho da célula) e adicionando 40 (margem inicial), e fazendo o mesmo para a linha.
+            retangulo = pygame.Rect(pos_x, pos_y, 52, 52) # cria um retangulo, com as coordenadas x e y calculadas, e com largura e altura de 52 pixels, representando a célula da grade a ser desenhada.
+            celula_tem_navio = tabuleiro[linha][coluna] != 0 # recebe true se a célula atual do tabuleiro contiver um navio (valor diferente de 0) e False caso contrário. Isso é usado para determinar se a célula deve ser desenhada como água ou como um navio, dependendo do valor presente no tabuleiro para aquela posição específica.
+            celula_foi_atirada = (coluna, linha) in tiros_jogador # recebe true se a célula atual (representada pelas coordenadas coluna e linha) tiver sido alvo de um tiro do jogador, ou seja, se as coordenadas estiverem presentes na lista tiros_jogador. Caso contrário, recebe False. Isso é usado para determinar se a célula deve ser desenhada como um acerto ou um erro, dependendo se o jogador atirou naquela posição específica.
 
             if celula_foi_atirada and celula_tem_navio:
                 pygame.draw.rect(tela_jogo, cor_acerto, retangulo)
