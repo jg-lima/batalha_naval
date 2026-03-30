@@ -1,7 +1,22 @@
 import pygame
 import sys
-from logica_jogo import *
-from interface_jogo import *
+from logica_jogo import (
+    novo_tabuleiro,
+    celula_do_mouse,
+    pode_colocar,
+    coloca_navio,
+    aplicar_tiro,
+    todos_destruidos,
+    contar_destruidos
+)
+from interface_jogo import (
+    criar_janela,
+    desenhar_grade,
+    desenhar_info,
+    mensagem,
+    tocar_som,
+    tela_vitoria
+)
 
 def main():
     tela_jogo, relogio_jogo, fonte_pequena, fonte_media, fonte_grande, sons_jogo = criar_janela() # Configura a janela do jogo e os recursos necessários
