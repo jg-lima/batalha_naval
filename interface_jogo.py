@@ -27,6 +27,20 @@ def tocar_som(sons_jogo, chave_som):
     sons_jogo[chave_som].play() # acessa o som correspondente à chave fornecida (chave_som) no dicionário sons_jogo e reproduz o som usando o método play().
 
 
+def obter_parte_navio(tabuleiro, coluna, linha):
+    id_navio = tabuleiro[linha][coluna]
+    if id_navio == 0:
+        return 0
+    
+    # Encontra a primeira coluna do navio
+    primeira_coluna = coluna
+    while primeira_coluna > 0 and tabuleiro[linha][primeira_coluna - 1] == id_navio:
+        primeira_coluna -= 1
+    
+    # Retorna qual parte é (1, 2 ou 3)
+    return coluna - primeira_coluna + 1
+
+
 def desenhar_grade(tela_jogo, fonte_pequena, tabuleiro, tiros_jogador, esconder=False, celula_ativa=None):
     cor_agua = "blue"
     cor_navio = "green"
@@ -34,6 +48,8 @@ def desenhar_grade(tela_jogo, fonte_pequena, tabuleiro, tiros_jogador, esconder=
     cor_erro = "gray"
     cor_borda = "black"
     cor_texto = "white"
+    imagem_barco = {1: pygame.image.load("./imagens/barco_1.png").convert_alpha(), 2: pygame.image.load("./imagens/barco_2.png").convert_alpha(), 3: pygame.image.load("./imagens/barco_3.png").convert_alpha()}
+    imagem_barco_destruido = {1: pygame.image.load("./imagens/barco_destruido_1.png").convert_alpha(), 2: pygame.image.load("./imagens/barco_destruido_2.png").convert_alpha(), 3: pygame.image.load("./imagens/barco_destruido_3.png").convert_alpha()}
 
     for linha in range(10):
         for coluna in range(10):
@@ -45,10 +61,14 @@ def desenhar_grade(tela_jogo, fonte_pequena, tabuleiro, tiros_jogador, esconder=
 
             if celula_foi_atirada and celula_tem_navio:
                 pygame.draw.rect(tela_jogo, cor_acerto, quadrado)
+                parte_navio = obter_parte_navio(tabuleiro, coluna, linha)
+                tela_jogo.blit(imagem_barco_destruido[parte_navio], quadrado)
             elif celula_foi_atirada:
                 pygame.draw.rect(tela_jogo, cor_erro, quadrado)
             elif celula_tem_navio and not esconder:
                 pygame.draw.rect(tela_jogo, cor_navio, quadrado)
+                parte_navio = obter_parte_navio(tabuleiro, coluna, linha)
+                tela_jogo.blit(imagem_barco[parte_navio], quadrado)
             else:
                 pygame.draw.rect(tela_jogo, cor_agua, quadrado)
 
@@ -56,8 +76,14 @@ def desenhar_grade(tela_jogo, fonte_pequena, tabuleiro, tiros_jogador, esconder=
 
     if celula_ativa and not esconder:
         coluna_ativa, linha_ativa = celula_ativa
-        for coluna in range(coluna_ativa, min(coluna_ativa + 3, 10)):
-            pygame.draw.rect(tela_jogo, (cor_texto), (40 + coluna * 52, 40 + linha_ativa * 52, 52, 52), 2)
+        # Desenha as 3 partes do navio
+        for parte in range(1, 4):
+            coluna = coluna_ativa + parte - 1
+            if coluna < 10:
+                pos_x = 40 + coluna * 52
+                pos_y = 40 + linha_ativa * 52
+                tela_jogo.blit(imagem_barco[parte], (pos_x, pos_y))
+                pygame.draw.rect(tela_jogo, cor_texto, (pos_x, pos_y, 52, 52), 2)
 
     letras = "ABCDEFGHIJ"
     for indice in range(10):
