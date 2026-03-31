@@ -1,34 +1,30 @@
-# Batalha Naval 🚢
+# Batalha Naval
 
-Um jogo clássico de Batalha Naval implementado em Python com Pygame para 2 jogadores.
-
----
-
-## 📋 Visão Geral
-
-O jogo simula a batalha naval tradicional onde dois jogadores, alternadamente, tentam destruir os navios do adversário. Cada jogador tem 7 navios de 3 células em um tabuleiro 10x10. O objetivo é descobrir e destruir todos os navios do oponente antes que seus próprios navios sejam destruídos.
+Um jogo de Batalha Naval implementado em Python com Pygame-ce
 
 ---
 
-## 🎮 Estrutura do Projeto
+## Visão Geral
+
+O jogo simula a batalha naval tradicional onde dois jogadores, alternadamente, tentam destruir os navios do adversário. Cada jogador tem 7 navios de 3 células em um tabuleiro 10x10. O objetivo é destruir todos os navios do oponente antes que seus próprios navios sejam destruídos.
+
+---
+
+## Estrutura do Projeto
 
 ```
 batalha_naval/
 ├── batalha_naval.py          # Arquivo principal - Fluxo e loop do jogo
 ├── logica_jogo.py            # Lógica de jogo - Funções do tabuleiro e mecânicas
-├── interface_jogo.py         # Interface gráfica - Desenho e sons
+├── interface_jogo.py         # Interface gráfica - Desenho, sons e imagem
 ├── README.md                 # Este arquivo
 ├── imagens/                  # Sprites dos navios
-│   └── inteiro/             # Imagens dos navios inteiro e destruído
 ├── sons/                     # Efeitos sonoros
-│   ├── acertou.mp3          # Som de acerto
-│   └── agua.mp3             # Som de erro
-└── .venv/                    # Ambiente virtual Python
 ```
 
 ---
 
-## 🧩 Módulos
+## Módulos
 
 ### 1. **logica_jogo.py** - Lógica Core do Jogo
 
@@ -229,7 +225,7 @@ jogador_vencedor         # Jogador que venceu (1 ou 2)
 
 ---
 
-## 📊 Estrutura de Dados
+## Estrutura de Dados
 
 ### Tabuleiro
 ```python
@@ -265,7 +261,7 @@ tiros = [
 
 ---
 
-## 🎮 Fluxo de Interação do Usuário
+## Fluxo de Interação do Usuário
 
 ### Fase de Setup
 1. **Clique do mouse** → Detecta posição via `celula_do_mouse()`
@@ -284,7 +280,7 @@ tiros = [
 
 ---
 
-## 🔧 Mecânicas Importantes
+## Mecânicas Importantes
 
 ### Detecção de Célula do Mouse
 - Coordenada pixel → Índice tabuleiro
@@ -309,12 +305,13 @@ tiros = [
 
 ---
 
-## 🎨 Recursos Visuais
+## Recursos Visuais
 
 ### Dimensões e Cores
-- **Tabuleiro:** 10x10 células de 52x52 pixels
-- **Área total:** 600x600 pixels
+- **Tabuleiro:** 10x10 células de 52x52 pixels = 520x520
+- **Área total:** 600x680 pixels
 - **Área info:** 600x80 pixels na base
+- **Área jogo** 600x600 pixels
 - **Cores:**
   - Azul: Água não atingida
   - Verde: Navio não destruído
@@ -331,7 +328,7 @@ tiros = [
 
 ---
 
-## 📝 Resumo da Lógica
+## Resumo da Lógica
 
 | Componente | Função | Entrada | Saída |
 |-----------|--------|---------|-------|
@@ -344,13 +341,3 @@ tiros = [
 | `contar_destruidos()` | Conta navios perdidos | (tab, tiros) | Inteiro 0-7 |
 
 ---
-
-## 📌 Notas Técnicas
-
-- **Tabuleiro:** Matriz de inteiros (0 = água, 1-7 = navios)
-- **Tiros:** Lista de tuplas (col, lin)
-- **Validação:** Antes de cada ação do jogador
-- **Loop:** pygame.event.get() a 60 FPS
-- **Sons:** Pygame mixer para efeitos sonoros
-- **Imagens:** Pygame image.load() com `.convert_alpha()` para otimização
-
