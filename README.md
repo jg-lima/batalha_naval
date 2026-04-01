@@ -139,12 +139,19 @@ Gerencia toda a renderização visual(formas e imagens) e áudio.
 - **Parâmetro:** Chave do som ("acerto" ou "erro")
 
 #### `obter_parte_navio(tabuleiro, coluna, linha)`
-- **Função:** Determina qual parte do navio foi atingida (1, 2 ou 3)
+- **Função:** Determina qual das 3 partes do navio está naquela célula para desenhar a imagem correta
+- **Parâmetros:** Tabuleiro, coluna e linha da célula
+- **Retorno:** Número da parte (1, 2 ou 3) ou 0 se não houver navio
 - **Lógica:**
-  - Encontra a primeira coluna do navio
-  - Calcula a posição relativa dentro do navio
-  - Usa imagens diferentes para cada parte do navio
-- **Retorna:** Número da parte (1, 2 ou 3) ou 0 se sem navio
+  1. Identifica o ID do navio naquela célula
+  2. Encontra a primeira coluna do navio movendo-se para esquerda até detectar mudança de ID
+  3. Calcula a posição relativa: `coluna_atual - primeira_coluna + 1`
+- **Exemplo:** 
+  - Navio nas colunas [3, 4, 5] com ID 1
+  - Primeira coluna 3
+  - Na coluna 3 (3 - 3 + 1) = retorna 1 (primeira parte)
+  - Na coluna 4 (4 - 3 + 1) = retorna 2 (segunda parte)
+  - Na coluna 5 (5 - 3 + 1) = retorna 3 (terceira parte)
 
 #### `desenhar_grade(tela_jogo, fonte, tabuleiro, tiros_jogador, esconder, celula_ativa)`
 - **Função:** Desenha o tabuleiro 10x10 na tela
