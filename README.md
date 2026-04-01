@@ -50,8 +50,8 @@ tabuleiro = [[0, 0, 0, ..., 0],
 Transforma a posição do cursor (em pixels) numa célula do tabuleiro (coluna, linha). O tabuleiro começa no pixel (40, 40) e cada célula tem 52×52 px, retorna a coordenada`(coluna, linha)` ou `None` se o mouse estiver fora do tabuleiro.
 
 
-- **Entrada:** Coordenadas x, y do mouse (pixels)
-- **Saída:** Tupla (coluna, linha) ou None
+- **Parâmetros:** Coordenadas x, y do mouse (pixels)
+- **Retorna:** Tupla (coluna, linha) ou None
 - **Função:** Converte coordenadas de pixel em índices do tabuleiro
 - **Cálculo:**
   - Tabuleiro começa em pixel (40, 40)
@@ -62,18 +62,17 @@ Transforma a posição do cursor (em pixels) numa célula do tabuleiro (coluna, 
 #### `pode_colocar(tabuleiro, coluna, linha)`
 Antes de confirmar a posição de um navio, esta função verifica duas coisas: se o navio de 3 células cabe horizontalmente a partir daquela coluna, e se todas as células estão livres. Retorna `True` ou `False`.
 
-- **Entrada:** Tabuleiro, coluna, linha de início
-- **Saída:** Boolean
+- **Parâmetros:** Tabuleiro, coluna, linha de início
+- **Retorna:** Boolean `True` se posição é válida, `False` caso contrário
 - **Verificações:**
   1. Navio ocupa 3 células horizontalmente → `coluna + 3 ≤ 10`
   2. Todas as 3 células devem estar vazias (valor 0)
-- **Retorna:** `True` se posição é válida, `False` caso contrário
 
 #### `coloca_navio(tabuleiro, coluna, linha, id_navio)`
 Coloca o navio no tabuleiro preenchendo 3 células consecutivas com o ID do navio (de `1` a `7`, na ordem em que foram posicionados).
 
-- **Entrada:** Tabuleiro, posição, ID do navio (1-7)
-- **Ação:** Preenche 3 células consecutivas com o ID do navio
+- **Parâmtros:** Tabuleiro, posição, ID do navio (1-7)
+- **Retorna:** Preenche 3 células consecutivas com o ID do navio
 - **Direção:** Horizontal (mesmo linha, colunas consecutivas)
 
 ```python
@@ -83,36 +82,35 @@ Coloca o navio no tabuleiro preenchendo 3 células consecutivas com o ID do navi
 ```
 
 #### `aplicar_tiro(tabuleiro, tiros_jogador, coluna, linha)`
-Executa um tiro. Se a célula for água (`0`), o tiro é registrado e retorna `False`. Se for navio, registra o acerto e verifica se **todas as 3 células** daquele navio foram atingidas só então retorna `True` (navio destruído).
+Executa um tiro. Se a célula for água (`0`), registra o tiro e retorna `False`. Se for navio, **destrói o navio inteiro imediatamente** (registra as 3 células como atingidas) e retorna `True`.
 
-- **Entrada:** Tabuleiro adversário, lista de tiros, coordenadas do tiro
-- **Saída:** Boolean (True = destruiu navio, False = errou)
+- **Parâmetros:** Tabuleiro adversário, lista de tiros, coordenadas do tiro
+- **Retorna:** Boolean (True = destruiu navio, False = errou)
 - **Lógica:**
   1. Se célula = 0 (água): registra tiro, retorna False
   2. Se célula ≠ 0 (navio):
-     - Registra o tiro
-     - Verifica se o navio foi completamente destruído
-     - Retorna True se TODAS as 3 células do navio foram atingidas
-- **Adição:** Tiro é adicionado à lista `tiros_jogador` como tupla (coluna, linha)
+     - Identifica o ID do navio atingido
+     - Localiza TODAS as 3 células daquele navio no tabuleiro
+     - Adiciona as 3 coordenadas à lista `tiros_jogador`
+     - Retorna True imediatamente (navio destruído instantaneamente)
 
 #### `todos_destruidos(tabuleiro, tiros_jogador)`
 Percorre o tabuleiro inteiro procurando alguma célula de navio que ainda não foi atingida. Se não encontrar nenhuma, retorna `True` um fim de jogo.
 
-- **Entrada:** Tabuleiro, lista de tiros
-- **Saída:** Boolean
-- **Lógica:** Percorre todo o tabuleiro procurando por uma célula de navio não atingida
-- **Retorna:** `True` se TODOS os navios foram destruídos (todos atingidos)
+- **Parâmetros:** Tabuleiro, lista de tiros
+- **Retorna:** Boolean `True` se TODOS os navios foram destruídos (todos atingidos)
+- **Lógica:** Percorre todo o tabuleiro procurando por um navio não atingido
 
 #### `contar_destruidos(tabuleiro, tiros_jogador)`
-Conta quantos navios já foram completamente destruídos. Usa um `set` para não contar o mesmo navio mais de uma vez. Retorna um número de `0` a `7`.
+Conta quantos navios foram atingidos. Usa um `set` para evitar contagem duplicada. Retorna um número de `0` a `7`.
 
-- **Entrada:** Tabuleiro, lista de tiros
-- **Saída:** Inteiro (número de navios destruídos)
+- **Parâmetros:** Tabuleiro, lista de tiros
+- **Retorna:** Inteiro (número de navios atingidos/destruídos 0-7)
 - **Lógica:**
   - Usa um conjunto (`set`) para armazenar IDs únicos de navios atingidos
-  - Percorre tabuleiro procurando células de navio atingidas
-  - Cada navio é contado apenas uma vez, mesmo que tenha múltiplas células atingidas
-- **Retorna:** Número de navios destruídos (0-7)
+  - Percorre todo o tabuleiro procurando células de navio que estão na lista de tiros
+  - Cada ID de navio é adicionado ao conjunto apenas uma vez, independente de quantas células foram atingidas
+  - Retorna o tamanho do conjunto (número de navios únicos atingidos)
 
 ---
 
@@ -136,7 +134,7 @@ Gerencia toda a renderização visual(formas e imagens) e áudio.
 
 #### `tocar_som(sons_jogo, chave_som)`
 - **Função:** Reproduz som específico
-- **Parâmetro:** Chave do som ("acerto" ou "erro")
+- **Parâmetros:** Sons carregados(dicionário contendo o caminho dos sons), Chave do som ("acerto" ou "erro")
 
 #### `obter_parte_navio(tabuleiro, coluna, linha)`
 - **Função:** Determina qual das 3 partes do navio está naquela célula para desenhar a imagem correta
