@@ -24,16 +24,18 @@ def coloca_navio(tabuleiro, coluna, linha, id_navio):
 
 
 def aplicar_tiro(tabuleiro, tiros_jogador, coluna, linha):
-    id_navio = tabuleiro[linha][coluna] # obtém o ID do navio presente na célula onde o tiro foi aplicado. Se a célula estiver vazia (0), significa que o tiro atingiu água. Caso contrário, o tiro atingiu um navio, e o ID do navio é usado para verificar se ele foi completamente destruído.
-
+    id_navio = tabuleiro[linha][coluna]
+    
     if id_navio == 0:
         tiros_jogador.append((coluna, linha))
-        return False # se o tiro atingiu água (ID do navio é 0), a função adiciona as coordenadas do tiro à lista de tiros do jogador e retorna False, indicando que o tiro não destruiu nenhum navio.
-
+        return False
+    
+    # Destruir TODAS as células do navio
     for indice_linha in range(10):
         for indice_coluna in range(10):
-            if tabuleiro[indice_linha][indice_coluna] == id_navio and (indice_coluna, indice_linha) not in tiros_jogador: # verifica se há alguma célula do navio que ainda não foi atingida. Se encontrar uma célula do navio que não foi atingida (ou seja, que tem o mesmo ID do navio e cujas coordenadas não estão na lista de tiros do jogador), a função retorna False, indicando que o navio ainda não foi completamente destruído.
-                tiros_jogador.append((indice_coluna, indice_linha)) # se o tiro atingiu um navio, a função adiciona as coordenadas do tiro à lista de tiros do jogador. Isso é feito para registrar que o jogador já atingiu essa parte do navio, mesmo que o navio ainda não esteja completamente destruído.
+            if tabuleiro[indice_linha][indice_coluna] == id_navio:
+                tiros_jogador.append((indice_coluna, indice_linha))
+    
     return True # se a função percorreu todas as células do tabuleiro e não encontrou nenhuma célula do navio que não tenha sido atingida, isso significa que o navio foi completamente destruído, e a função retorna True.
 
 
